@@ -7,10 +7,58 @@
     <style>
         body { margin: 0; }
         canvas { display: block; }
+        #fullscreenBtn {
+            position: fixed;
+            bottom: 10px; /* Changed from top to bottom */
+            right: 10px;
+            width: 32px; /* Adjust as needed */
+            height: 32px; /* Adjust as needed */
+            cursor: pointer;
+            z-index: 1000;
+            /* background-color, border-radius, and padding removed for full transparency */
+        }
     </style>
-  <script type="module" crossorigin src="/fishes/assets/index-CyDj826H.js"></script>
+  <script type="module" crossorigin src="./assets/index-CyDj826H.js"></script>
 </head>
 <body>
-    <audio id="backgroundMusic" loop autoplay preload="auto" src="/fishes/assets/background_music-wppUs59e.wav"></audio>
+    <img id="fullscreenBtn" src="icons/enter_fullscreen_icon.svg" alt="Toggle Fullscreen" title="Toggle Fullscreen">
+    <audio id="backgroundMusic" loop autoplay preload="auto" src="./assets/background_music-wppUs59e.wav"></audio>
+    <script>
+        const fullscreenBtn = document.getElementById('fullscreenBtn');
+
+        function toggleFullscreen() {
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen().then(() => {
+                    fullscreenBtn.src = 'icons/exit_fullscreen_icon.svg'; // Use relative path
+                    fullscreenBtn.title = 'Exit Fullscreen';
+                }).catch(err => {
+                    console.error(`Error attempting to enable full-screen mode: ${err.message} (${err.name})`);
+                });
+            } else {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen().then(() => {
+                        fullscreenBtn.src = 'icons/enter_fullscreen_icon.svg'; // Use relative path
+                        fullscreenBtn.title = 'Enter Fullscreen';
+                    });
+                }
+            }
+        }
+
+        if (fullscreenBtn) {
+            fullscreenBtn.addEventListener('click', toggleFullscreen);
+
+            document.addEventListener('fullscreenchange', () => {
+                if (!document.fullscreenElement) {
+                    fullscreenBtn.src = 'icons/enter_fullscreen_icon.svg'; // Use relative path
+                    fullscreenBtn.title = 'Enter Fullscreen';
+                } else {
+                    fullscreenBtn.src = 'icons/exit_fullscreen_icon.svg'; // Use relative path
+                    fullscreenBtn.title = 'Exit Fullscreen';
+                }
+            });
+        } else {
+            console.warn("Fullscreen button #fullscreenBtn not found.");
+        }
+    </script>
 </body>
 </html>
